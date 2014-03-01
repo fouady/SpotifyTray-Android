@@ -9,4 +9,4 @@ streaming features and is essentially just the UI for demonstration
 purposes only.
 
 ## License
-MIT License. Copyright 2013 Fouad Yaseen.
+MIT License. Copyright 2014 Fouad Yaseen.
