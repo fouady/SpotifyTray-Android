@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 SpotifyTray-Android
 ===================
 This Android project provides simplistic code to produce a floating
