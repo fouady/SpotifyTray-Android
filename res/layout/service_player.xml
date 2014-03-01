@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_layout"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:visibility="invisible" >
+
+    <RelativeLayout
+        android:id="@+id/content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        
+        <RelativeLayout
+	        android:id="@+id/logo_layout"
+	        android:layout_width="0dp"
+	        android:layout_height="0dp"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignParentBottom="true"
+	        android:background="@drawable/spotify_logo" >
+	    </RelativeLayout>
+	
+	    <RelativeLayout
+	        android:id="@+id/cover_layout"
+	        android:layout_width="0dp"
+	        android:layout_height="0dp"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignParentBottom="true" >
+	    </RelativeLayout>
+	    
+	    <RelativeLayout
+	        android:id="@+id/cover_helper_layout"
+	        android:layout_width="0dp"
+	        android:layout_height="0dp"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignParentBottom="true" >
+	    </RelativeLayout>
+	
+	    <ImageView
+	        android:id="@+id/tray_opener"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_toRightOf="@id/logo_layout"
+	        android:layout_centerVertical="true"
+	        android:src="@drawable/spot_tray_button" />
+        
+        
+    </RelativeLayout>
+
+</RelativeLayout>

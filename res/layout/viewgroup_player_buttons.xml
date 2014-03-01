@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignRight="@id/tray_opener" >
+
+        <ImageButton
+            android:id="@+id/button_back"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/spot_back"
+            android:onClick="prevButtonClicked"
+            style="@style/CustomImageButton" />
+
+        <ImageButton
+            android:id="@+id/button_pause"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/spot_pause"
+            style="@style/CustomImageButton" />
+
+        <ImageButton
+            android:id="@+id/button_next"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/spot_forward"
+            android:onClick="nextButtonClicked"
+            style="@style/CustomImageButton" />
+
+    </LinearLayout>
