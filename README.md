@@ -1,5 +1,6 @@
-Chatheads-like Spotify tray for Android
-======================================
+<<<<<<< HEAD
+SpotifyTray-Android
+===================
 This Android project provides simplistic code to produce a floating
 widget like Facebook's chatheads app. It is supported by Android 2.2.3+.
 
