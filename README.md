@@ -4,7 +4,7 @@ This Android project provides simplistic code to produce a floating
 widget like Facebook's chatheads app. It is supported by Android 2.3.3+
 (API 10+).
 
-Please note that it does not provide or include any music Spotify
+Please note that it does not provide or include any Spotify music
 streaming features and is essentially just the UI for demonstration
 purposes only.
 
