@@ -17,8 +17,7 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_alignParentTop="true"
 	        android:layout_alignParentRight="true"
-	        android:layout_alignParentBottom="true"
-	        android:background="@drawable/spotify_logo" >
+	        android:layout_alignParentBottom="true" >
 	    </RelativeLayout>
 	
 	    <RelativeLayout
