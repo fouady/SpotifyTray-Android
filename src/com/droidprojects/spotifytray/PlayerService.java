@@ -2,16 +2,11 @@ package com.droidprojects.spotifytray;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
-
-
-
-
-
+import com.droidprojects.spotifytray.controller.MockPlaylist;
+import com.droidprojects.spotifytray.controller.MockPlaylist.MockPlaylistListener;
 import com.example.serviceproject.R;
 
 import android.app.Notification;
@@ -34,11 +29,14 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 @SuppressWarnings("deprecation")
-public class PlayerService extends Service {
+public class PlayerService extends Service
+							implements MockPlaylistListener{
 
 	// 
 	private static final int TRAY_HIDDEN_FRACTION 			= 6; 	// Controls fraction of the tray hidden when open
@@ -60,6 +58,12 @@ public class PlayerService extends Service {
 	private LinearLayout 				mPlayerButtonsLayout;	// Contains playback buttons
 	private LinearLayout 				mSongInfoLayout;		// Contains Text information on the current song
 
+	// Widgets
+	private ImageButton mPlaySongButton;
+	private ImageButton mPauseSongButton;
+	private TextView mSongTitleView;
+	private TextView mSingerView;
+	
 	// Variables that control drag
 	private int mStartDragX;
 	//private int mStartDragY; // Unused as yet
@@ -73,9 +77,8 @@ public class PlayerService extends Service {
 	private TrayAnimationTimerTask 	mTrayTimerTask;
 	private Handler 				mAnimationHandler = new Handler();
 	
-	// Mock images for album covers
-	private ArrayList<String> 	mAlbumCoverImagePaths = new ArrayList<String>();
-	private int 				mAlbumCoverImageIndex = 0;
+	// Mock song data
+	private MockPlaylist mPlaylist;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -117,7 +120,12 @@ public class PlayerService extends Service {
 		mRootLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
 		mWindowManager.addView(mRootLayout, mRootLayoutParams);
 		
-		populateAlbumCoverImages();
+		mPlaySongButton = (ImageButton) mPlayerButtonsLayout.findViewById(R.id.button_play);
+		mPauseSongButton = (ImageButton) mPlayerButtonsLayout.findViewById(R.id.button_pause);
+		mSongTitleView = (TextView) mSongInfoLayout.findViewById(R.id.song_name);
+		mSingerView = (TextView) mSongInfoLayout.findViewById(R.id.singer_name);
+		
+		mPlaylist = new MockPlaylist(this);
 		
 		// Since there is no function in a service like onWindowFocusChanged(), this function
 		// is executed 50 milliseconds later. The main assumption is that all the layouts
@@ -145,7 +153,7 @@ public class PlayerService extends Service {
 				// Setup background album cover
 				is=null;
 				try {
-					is = getAssets().open(mAlbumCoverImagePaths.get(mAlbumCoverImageIndex));
+					is = getAssets().open(mPlaylist.getCurrentSongInfo().mAlbumCoverPath);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -181,6 +189,8 @@ public class PlayerService extends Service {
 						marg*3, 
 						marg);
 				mRootLayout.updateViewLayout(mSongInfoLayout, params);
+				mSongTitleView.setText(mPlaylist.getCurrentSongInfo().mTitle);
+				mSingerView.setText(mPlaylist.getCurrentSongInfo().mSinger);
 				
 				// Setup the root layout
 				mRootLayoutParams.x = -mLogoLayout.getLayoutParams().width;
@@ -240,6 +250,7 @@ public class PlayerService extends Service {
 	// The app is closing.
 	@Override
 	public void onDestroy() {
+		mPlaylist.stopCurrentSong();
 		if (mRootLayout != null)
 			mWindowManager.removeView(mRootLayout);
 	}
@@ -411,36 +422,12 @@ public class PlayerService extends Service {
 		}
 	}
 	
-	// Populates the arraylist with mock album cover images.
-	private void populateAlbumCoverImages(){
-		mAlbumCoverImagePaths.add("adele.png");
-		mAlbumCoverImagePaths.add("greenday.jpg");
-		mAlbumCoverImagePaths.add("daftpunk.jpg");
-		mAlbumCoverImagePaths.add("graffiti.jpg");
-		mAlbumCoverImagePaths.add("akon.jpg");
-	}
-	
-	// Play next song
-	public void nextButtonClicked(View view){
-		mAlbumCoverImageIndex++;
-		mAlbumCoverImageIndex%=mAlbumCoverImagePaths.size();
-		switchSong(mAlbumCoverImageIndex);
-	}
-	
-	// Play previous song
-	public void prevButtonClicked(View view){
-		mAlbumCoverImageIndex--;
-		mAlbumCoverImageIndex+=mAlbumCoverImagePaths.size();
-		mAlbumCoverImageIndex%=mAlbumCoverImagePaths.size();
-		switchSong(mAlbumCoverImageIndex);
-	}
-	
 	// Load new album cover image
-	private void switchSong(int songIndex){
+	private void changeSongDisplayInfo(){
 		
 		InputStream is=null;
 		try {
-			is = getAssets().open(mAlbumCoverImagePaths.get(songIndex));
+			is = getAssets().open(mPlaylist.getCurrentSongInfo().mAlbumCoverPath);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -468,5 +455,60 @@ public class PlayerService extends Service {
 		fadeInAnim.setDuration(1000);
 		mAlbumCoverHelperLayout.startAnimation(fadeOutAnim);
 		mAlbumCoverLayout.startAnimation(fadeInAnim);
+		
+		// Set new song info
+		mSongTitleView.setText(mPlaylist.getCurrentSongInfo().mTitle);
+		mSingerView.setText(mPlaylist.getCurrentSongInfo().mSinger);
+	}
+	
+	/**************************** Callbacks **************************************/
+	
+	// Play current song
+	public void playButtonClicked(View view){
+		mPlaySongButton.setVisibility(View.INVISIBLE);
+		mPauseSongButton.setVisibility(View.VISIBLE);
+		mPlaylist.playCurrentSong();
+	}
+
+	// Pause current song
+	public void pauseButtonClicked(View view){
+		mPauseSongButton.setVisibility(View.INVISIBLE);
+		mPlaySongButton.setVisibility(View.VISIBLE);
+		mPlaylist.pauseCurrentSong();
+	}
+	
+	// Play next song
+	public void nextButtonClicked(View view){
+		mPlaySongButton.setVisibility(View.INVISIBLE);
+		mPauseSongButton.setVisibility(View.VISIBLE);
+		mPlaylist.playNextSong();
+		changeSongDisplayInfo();
+	}
+	
+	// Play previous song
+	public void prevButtonClicked(View view){
+		mPlaySongButton.setVisibility(View.INVISIBLE);
+		mPauseSongButton.setVisibility(View.VISIBLE);
+		mPlaylist.playPreviousSong();
+		changeSongDisplayInfo();
+	}
+
+	
+	// Mock song playlist callback - Notifies the UI about song progress. 
+	@Override
+	public void updateSongProgress(int playheadPosition) {
+		// TODO - Will be implemented later
+	}
+
+	// Mock song playlist callback - Notifies the UI to update song info. Current song has changed.
+	@Override
+	public void startedNextSong() {
+		changeSongDisplayInfo();
+	}
+
+	// Mock song playlist callback - Provides the UI thread handler so that the callee thread could update UI
+	@Override
+	public Handler getHandler() {
+		return new Handler();
 	}
 }

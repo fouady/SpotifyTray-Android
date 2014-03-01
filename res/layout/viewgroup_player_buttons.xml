@@ -13,13 +13,29 @@
             android:onClick="prevButtonClicked"
             style="@style/CustomImageButton" />
 
-        <ImageButton
-            android:id="@+id/button_pause"
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:src="@drawable/spot_pause"
-            style="@style/CustomImageButton" />
+            android:layout_weight="1" >
+
+            <ImageButton
+                android:id="@+id/button_play"
+                style="@style/CustomImageButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:onClick="playButtonClicked"
+                android:src="@drawable/spot_play" />
+            
+            <ImageButton
+                android:id="@+id/button_pause"
+                style="@style/CustomImageButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:onClick="pauseButtonClicked"
+                android:src="@drawable/spot_pause"
+                android:visibility="invisible" />
+
+        </RelativeLayout>
 
         <ImageButton
             android:id="@+id/button_next"
