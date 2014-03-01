@@ -4,7 +4,7 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
+    <style name="AppBaseTheme" parent="android:Theme">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -15,6 +15,12 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        	<item name="android:windowIsTranslucent">true</item>
+		    <item name="android:windowBackground">@android:color/transparent</item>
+		    <item name="android:windowContentOverlay">@null</item>
+		    <item name="android:windowNoTitle">true</item>
+		    <item name="android:windowIsFloating">true</item>
+		    <item name="android:backgroundDimEnabled">false</item>
     </style>
 
     <!-- Image Button styles -->
@@ -25,4 +31,5 @@
         	<item name="android:paddingBottom">8dp</item>
         	<item name="android:scaleType">fitCenter</item>
         	<item name="android:adjustViewBounds">true</item>    </style>
+    
 </resources>
