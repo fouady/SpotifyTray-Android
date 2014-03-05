@@ -15,5 +15,8 @@ Assume that it's a small muted music player without any audio.
 - Each song has a duration. After the song has played for that duration, it switches to next song which is evident from the animated change that occurs when next button is pressed. You will notice this if you stay on the first song for 30s.
 - The widget can be shut down from notification menu.
 
+##Demo
+https://www.youtube.com/watch?v=hdxdTkdNkVs
+
 ## License
 MIT License. Copyright 2014 Fouad Yaseen.
