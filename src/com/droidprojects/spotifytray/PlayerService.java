@@ -127,9 +127,8 @@ public class PlayerService extends Service
 		
 		mPlaylist = new MockPlaylist(this);
 		
-		// Since there is no function in a service like onWindowFocusChanged(), this function
-		// is executed 50 milliseconds later. The main assumption is that all the layouts
-		// have inflated and the widths/heights have been calculated within 50ms.
+		// Post these actions at the end of looper message queue so that the layout is
+		// fully inflated once these functions execute
 		mRootLayout.postDelayed(new Runnable() {
 			@Override
 			public void run() {
